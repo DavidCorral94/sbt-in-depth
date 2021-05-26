@@ -35,7 +35,8 @@
 - `sbt clean;test;run` -> we can run multiple tasks using one command, separated `;`
 - `sbt ~test` -> will rerun all tests when any code changes
 - `sbt ~compile` -> will compile code whenever you change a file in `src/main`
-- `sbt service/assembly` -> will generate the `fat JAR` file
+- `sbt service/assembly` -> will generate the `fat JAR` file for the `service` subproject
+- `sbt release` -> releases a new release configured according to the `build.sbt` and `version.sbt`
 
 ### build.sbt
 
