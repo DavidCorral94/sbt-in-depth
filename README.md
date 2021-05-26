@@ -3,10 +3,23 @@
 ## Doubts to ask
 
 - Is there any command/config to 'automatically' download the dependencies specified at `build.sbt` (Load sbt changes)
+- Is there any command to see/suggest an update of a plugin version?
+- The command `sbt coverageReport` doesn't create any `index.html` (slide nº`98`) but when I update the `build.sbt`
+  configuration according to the slide nº`101`, and then run the command `sbt clean coverage test coverageReport` it
+  works and generate the reports.
+- Are the Scala apps deployed _as_ Java apps (using the fat jar)? Which is a good (and free) provider to deploy Scala
+  apps to play around (Heroku)?
+- Issue I faced: I put the wrong class name in the `build.sbt` for the assembly, I run `sbt service/assembly`, realised
+  when run the jar file that the class name was wrong, so I changed it again in the `build.sbt`. I tried to assembly
+  again but, the compiler says `Assembly up to date ...` so it didn't recreate the jar file. Is there any way to force
+  the assembly?
+- In slide nº`111` we configure the plugin `sbt-native-packager` for docker. According to IntelliJ, the file is not
+  well-formed, but if we run  `sbt service/docker:stage` it works and generates the dockerfile.
 
 ## Highlights
 
 ### Commands
+
 - `sbt compile` -> compiles the project
 - `sbt run` -> runs the project
 - `sbt service/run` -> runs the `service` subproject
@@ -22,6 +35,15 @@
 - `sbt clean;test;run` -> we can run multiple tasks using one command, separated `;`
 - `sbt ~test` -> will rerun all tests when any code changes
 - `sbt ~compile` -> will compile code whenever you change a file in `src/main`
+- `sbt service/assembly` -> will generate the `fat JAR` file
 
 ### build.sbt
+
 - `ThisBuild` allows us to define a default for all the projects within the sbt file
+
+### Plugins
+
+- They are defined at `project\plugins.sbt`
+- Useful ones:
+    - `scalafmt` (already present in IntelliJ)
+    - `sbt-scoverage`

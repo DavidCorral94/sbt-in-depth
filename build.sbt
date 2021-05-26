@@ -1,25 +1,26 @@
 import sbt.Keys.scalaVersion
+//import sbtassembly.AssemblyPlugin.autoImport.assemblyJarName
 
 ThisBuild / scalaVersion := "2.13.5"
+
+ThisBuild / coverageEnabled := true
+
+//assembly / assemblyJarName := "core.jar" // Updated, 'in' keyword deprecated ref: https://www.scala-sbt.org/1.x/docs/Migrating-from-sbt-013x.html#slash
 
 lazy val coreDependencies = Seq("org.typelevel" %% "cats-core" % "2.3.1")
 
 lazy val allDependencies =
-  coreDependencies ++ Seq(
-    "org.typelevel" %% "cats-effect" % "2.3.1",
-    "com.typesafe" % "config" % "1.4.1"
-  )
+  coreDependencies ++ Seq("org.typelevel" %% "cats-effect" % "2.3.1", "com.typesafe" % "config" % "1.4.1")
 
-lazy val service = project
-  .settings(
-    libraryDependencies ++= allDependencies
-  )
-  .in(file("service"))
-  .aggregate(core)
-  .dependsOn(core)
+lazy val service =
+  project
+    .settings(libraryDependencies ++= allDependencies)
+    .settings(coverageMinimum := 50, coverageFailOnMinimum := false)
+    .settings(Compile / mainClass := Some("com.example.HelloWorld")) // Updated as line 8 // class is HelloWorld
+    .in(file("service"))
+    .aggregate(core)
+    .dependsOn(core)
+    .enablePlugins(JavaAppPackaging)
+    .enablePlugins(DockerPlugin)
 
-lazy val core = project
-  .settings(
-    libraryDependencies ++= coreDependencies
-  )
-  .in(file("core"))
+lazy val core = project.settings(libraryDependencies ++= coreDependencies).in(file("core"))
