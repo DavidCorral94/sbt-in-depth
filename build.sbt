@@ -1,9 +1,24 @@
 import sbt.Keys.scalaVersion
 //import sbtassembly.AssemblyPlugin.autoImport.assemblyJarName
+import ReleaseTransformations._
+
+releaseProcess := Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  setNextVersion,
+  commitNextVersion,
+  pushChanges
+)
 
 ThisBuild / scalaVersion := "2.13.5"
 
 ThisBuild / coverageEnabled := true
+
+ThisBuild / publishArtifact := false
 
 //assembly / assemblyJarName := "core.jar" // Updated, 'in' keyword deprecated ref: https://www.scala-sbt.org/1.x/docs/Migrating-from-sbt-013x.html#slash
 
@@ -17,6 +32,16 @@ lazy val service =
     .settings(libraryDependencies ++= allDependencies)
     .settings(coverageMinimum := 50, coverageFailOnMinimum := false)
     .settings(Compile / mainClass := Some("com.example.HelloWorld")) // Updated as line 8 // class is HelloWorld
+    .settings(releaseProcess := Seq[ReleaseStep](
+      checkSnapshotDependencies,
+      inquireVersions,
+      runClean,
+      setReleaseVersion,
+      commitReleaseVersion,
+      tagRelease,
+      setNextVersion,
+      commitNextVersion
+    ))
     .in(file("service"))
     .aggregate(core)
     .dependsOn(core)
